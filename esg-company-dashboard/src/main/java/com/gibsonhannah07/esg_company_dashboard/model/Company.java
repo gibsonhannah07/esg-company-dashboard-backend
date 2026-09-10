@@ -1,6 +1,7 @@
 package com.gibsonhannah07.esg_company_dashboard.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "companies")
@@ -22,11 +23,19 @@ public class Company {
 
     private String source;
 
+    // Null = default/seeded company; otherwise the user who added it
+    @ManyToOne
+    @JoinColumn(name = "created_by_user_id", nullable = true)
+    private User createdBy;
+
+    private LocalDateTime createdAt;
+
     public Company() {}
 
     public Company(String name, String industry, String netZeroBy,
                    String renewableEnergyPct, String womenInLeadershipPct,
-                   String ceoPayRatio, String notes, String source) {
+                   String ceoPayRatio, String notes, String source,
+                   User createdBy, LocalDateTime createdAt) {
         this.name = name;
         this.industry = industry;
         this.netZeroBy = netZeroBy;
@@ -35,9 +44,10 @@ public class Company {
         this.ceoPayRatio = ceoPayRatio;
         this.notes = notes;
         this.source = source;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
     }
 
-    // getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -64,4 +74,10 @@ public class Company {
 
     public String getSource() { return source; }
     public void setSource(String source) { this.source = source; }
+
+    public User getCreatedBy() { return createdBy; }
+    public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
