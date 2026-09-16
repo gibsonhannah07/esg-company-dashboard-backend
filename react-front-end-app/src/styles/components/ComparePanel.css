@@ -1,0 +1,102 @@
+.compare-panel {
+  margin-top: 20px;
+  padding-bottom:32px;
+}
+
+.compare-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.compare-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.compare-clear-btn {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.compare-clear-btn:hover {
+  background: var(--bg-hover);
+}
+
+.compare-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.compare-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.compare-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.compare-card-header h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.compare-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.compare-remove-btn:hover {
+  color: var(--text-primary);
+}
+
+.compare-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.compare-card p strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.compare-card-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compare-add-btn {
+  background-color: var(--blue-mid);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.compare-add-btn:hover {
+  background: var(--green-mid);
+  color: #fff;
+}
