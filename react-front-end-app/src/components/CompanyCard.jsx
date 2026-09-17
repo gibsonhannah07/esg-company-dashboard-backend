@@ -1,6 +1,12 @@
 import "../styles/components/CompanyCard.css";
 
-export default function CompanyCard({company,onSelect,isSelected,}) {
+export default function CompanyCard({
+  company,
+  onSelect,
+  isSelected,
+  isFavorited,
+  onToggleFavorite,
+}) {
   return (
     <div
       className={`company-card ${isSelected ? "selected" : ""}`}
@@ -9,7 +15,7 @@ export default function CompanyCard({company,onSelect,isSelected,}) {
       <div className="card-header">
         <div>
           <p className="card-name">{company.name}</p>
-          {company.isUserAdded && (
+          {company.createdBy && (
             <span className="card-user-badge">You added</span>
           )}
         </div>
@@ -25,6 +31,16 @@ export default function CompanyCard({company,onSelect,isSelected,}) {
           }}
         >
           Learn More
+        </button>
+
+        <button
+          className={`card-favorite-btn ${isFavorited ? "favorited" : ""}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(company);
+          }}
+        >
+          {isFavorited ? "★ Favorited" : "☆ Favorite"}
         </button>
       </div>
     </div>
