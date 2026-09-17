@@ -23,8 +23,7 @@ export default function AddCompany({ onAdd, onClose }) {
       setError("Company name is required.");
       return;
     }
-    onAdd({ ...form, isUserAdded: true });
-    onClose();
+    onAdd(form);
   }
 
   return (
