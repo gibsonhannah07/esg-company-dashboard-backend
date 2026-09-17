@@ -1,25 +1,91 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/pages/Dashboard.css";
-import companies from "../data/companyData";
 import CompanyGrid from "../components/CompanyGrid";
 import FilterBar from "../components/FilterBar";
 import DetailPanel from "../components/DetailPanel";
 import ComparePanel from "../components/ComparePanel";
 import AddCompany from "../components/AddCompany";
+import {
+  getAllCompanies,
+  addCompany,
+  getFavoritesByUser,
+  addFavorite,
+  removeFavorite,
+  CURRENT_USER_ID,
+} from "../api";
 
 export default function Dashboard() {
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [filterIndustry, setFilterIndustry] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
   const [compared, setCompared] = useState([]);
-
-  const [userCompanies, setUserCompanies] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const allCompanies = [...companies, ...userCompanies];
+  // Maps companyId to favoriteId, so we know which favorite row to delete later once we connect backend
+  const [favoritesMap, setFavoritesMap] = useState({});
 
-  const filteredCompanies = allCompanies.filter((company) => {
+  useEffect(() => {
+    loadCompanies();
+    loadFavorites();
+  }, []);
+
+  async function loadCompanies() {
+    try {
+      setLoading(true);
+      const data = await getAllCompanies();
+      setCompanies(data);
+    } catch (err) {
+      setError("Could not load companies. Is the backend running?");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function loadFavorites() {
+    try {
+      const data = await getFavoritesByUser(CURRENT_USER_ID);
+      const map = {};
+      data.forEach((fav) => {
+        map[fav.company.id] = fav.id;
+      });
+      setFavoritesMap(map);
+    } catch (err) {
+      console.error("Could not load favorites", err);
+    }
+  }
+
+  async function handleToggleFavorite(company) {
+    const existingFavoriteId = favoritesMap[company.id];
+
+    if (existingFavoriteId) {
+      try {
+        await removeFavorite(existingFavoriteId);
+        setFavoritesMap((prev) => {
+          const updated = { ...prev };
+          delete updated[company.id];
+          return updated;
+        });
+      } catch (err) {
+        console.error("Failed to remove favorite", err);
+      }
+    } else {
+      try {
+        const newFavorite = await addFavorite(CURRENT_USER_ID, company.id);
+        if (newFavorite?.id) {
+          setFavoritesMap((prev) => ({ ...prev, [company.id]: newFavorite.id }));
+        }
+      } catch (err) {
+        console.error("Failed to add favorite", err);
+      }
+    }
+  }
+
+  const filteredCompanies = companies.filter((company) => {
     const matchesIndustry =
       filterIndustry === "All" || company.industry === filterIndustry;
 
@@ -46,33 +112,42 @@ export default function Dashboard() {
   function handleAddToCompare(company) {
     setCompared((prev) => {
       if (prev.length >= 2) return prev;
-      if (prev.find((c) => c.name === company.name)) return prev;
+      if (prev.find((c) => c.id === company.id)) return prev;
       return [...prev, company];
     });
   }
 
   function handleRemoveFromCompare(company) {
-    setCompared((prev) => prev.filter((c) => c.name !== company.name));
+    setCompared((prev) => prev.filter((c) => c.id !== company.id));
   }
 
   function handleClearCompare() {
     setCompared([]);
   }
 
-  function handleAddUserCompany(newCompany) {
-    setUserCompanies((prev) => [...prev, newCompany]);
+  async function handleAddUserCompany(newCompanyForm) {
+  try {
+    const saved = await addCompany(newCompanyForm);
+    setCompanies((prev) => [...prev, saved]);
 
     setCompared((prev) => {
       if (prev.length >= 2) return prev;
-      return [...prev, newCompany];
+      return [...prev, saved];
     });
 
     setShowAddModal(false);
+  } catch (err) {
+    console.error("Failed to add company", err);
+    throw err; // re-throw so AddCompany's catch block can show a message
   }
+}
 
   function openAddCompanyModal() {
     setShowAddModal(true);
   }
+
+  if (loading) return <p>Loading companies...</p>;
+  if (error) return <p className="error-text">{error}</p>;
 
   return (
     <section>
@@ -80,10 +155,10 @@ export default function Dashboard() {
         <h2>Company Dashboard</h2>
       </div>
       <div className="dashboard-about">
-        <p>Using this dashboard, users can search companies, filter by industry 
-          to narrow down a search, and click a company’s card to view its ESG 
-          metrics and more information. Users can also utilize the “add and compare” 
-          feature to temporarily add their own data and compare side by side with a company 
+        <p>Using this dashboard, users can search companies, filter by industry
+          to narrow down a search, and click a company’s card to view its ESG
+          metrics and more information. Users can also utilize the “add and compare”
+          feature to add their own data and compare side by side with a company
           in our database. </p>
       </div>
       <div className="search-bar">
@@ -126,6 +201,8 @@ export default function Dashboard() {
         onSelectCompany={handleSelectCompany}
         onCompare={handleAddToCompare}
         comparedCompanies={compared}
+        favoritesMap={favoritesMap}
+        onToggleFavorite={handleToggleFavorite}
       />
 
       {selectedCompany && (
@@ -135,6 +212,8 @@ export default function Dashboard() {
               company={selectedCompany}
               onClose={handleCloseDetail}
               onCompare={handleAddToCompare}
+              isFavorited={!!favoritesMap[selectedCompany.id]}
+              onToggleFavorite={() => handleToggleFavorite(selectedCompany)}
             />
           </div>
         </div>
