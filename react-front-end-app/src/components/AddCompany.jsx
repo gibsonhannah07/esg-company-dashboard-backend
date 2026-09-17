@@ -18,13 +18,20 @@ export default function AddCompany({ onAdd, onClose }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit() {
-    if (!form.name.trim()) {
-      setError("Company name is required.");
-      return;
-    }
-    onAdd(form);
+  async function handleSubmit() {
+  if (!form.name.trim()) {
+    setError("Company name is required.");
+    return;
   }
+
+  setError("");
+
+  try {
+    await onAdd(form);
+  } catch (err) {
+    setError("Something went wrong saving this company. Please try again.");
+  }
+}
 
   return (
     <div className="modal-overlay" onClick={onClose}>

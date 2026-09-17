@@ -126,20 +126,21 @@ export default function Dashboard() {
   }
 
   async function handleAddUserCompany(newCompanyForm) {
-    try {
-      const saved = await addCompany(newCompanyForm);
-      setCompanies((prev) => [...prev, saved]);
+  try {
+    const saved = await addCompany(newCompanyForm);
+    setCompanies((prev) => [...prev, saved]);
 
-      setCompared((prev) => {
-        if (prev.length >= 2) return prev;
-        return [...prev, saved];
-      });
+    setCompared((prev) => {
+      if (prev.length >= 2) return prev;
+      return [...prev, saved];
+    });
 
-      setShowAddModal(false);
-    } catch (err) {
-      console.error("Failed to add company", err);
-    }
+    setShowAddModal(false);
+  } catch (err) {
+    console.error("Failed to add company", err);
+    throw err; // re-throw so AddCompany's catch block can show a message
   }
+}
 
   function openAddCompanyModal() {
     setShowAddModal(true);
