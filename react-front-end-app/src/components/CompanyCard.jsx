@@ -15,8 +15,8 @@ export default function CompanyCard({
       <div className="card-header">
         <div>
           <p className="card-name">{company.name}</p>
-          {company.createdBy && (
-            <span className="card-user-badge">You added</span>
+          {company.addedBy && (
+            <span className="card-user-badge">Added by {company.addedBy}</span>
           )}
         </div>
         <span className="card-industry">{company.industry}</span>

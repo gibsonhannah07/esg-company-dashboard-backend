@@ -1,9 +1,7 @@
 package com.gibsonhannah07.esg_company_dashboard.controller;
 
 import com.gibsonhannah07.esg_company_dashboard.model.Company;
-import com.gibsonhannah07.esg_company_dashboard.model.User;
 import com.gibsonhannah07.esg_company_dashboard.repository.CompanyRepository;
-import com.gibsonhannah07.esg_company_dashboard.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +19,7 @@ public class CompanyController {
     @Autowired
     private CompanyRepository companyRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    // GET all companies (seeded + user-added)
+    // GET all companies
     @GetMapping
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
@@ -38,35 +33,28 @@ public class CompanyController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // POST a new company added by a user
+    // POST a new company (no login required)
     @PostMapping
-    public ResponseEntity<?> createCompany(@RequestBody CompanyRequest request) {
-        Optional<User> user = userRepository.findById(request.getUserId());
+    public ResponseEntity<Company> createCompany(@RequestBody CompanyRequest request) {
 
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid userId");
-        }
-
-        Company company = new Company(
-                request.getName(),
-                request.getIndustry(),
-                request.getNetZeroBy(),
-                request.getRenewableEnergyPct(),
-                request.getWomenInLeadershipPct(),
-                request.getCeoPayRatio(),
-                request.getNotes(),
-                request.getSource(),
-                user.get(),
-                LocalDateTime.now()
-        );
+        Company company = new Company();
+        company.setName(request.getName());
+        company.setIndustry(request.getIndustry());
+        company.setNetZeroBy(request.getNetZeroBy());
+        company.setRenewableEnergyPct(request.getRenewableEnergyPct());
+        company.setWomenInLeadershipPct(request.getWomenInLeadershipPct());
+        company.setCeoPayRatio(request.getCeoPayRatio());
+        company.setNotes(request.getNotes());
+        company.setSource(request.getSource());
+        company.setAddedBy(request.getAddedBy());
+        company.setCreatedAt(LocalDateTime.now());
 
         Company saved = companyRepository.save(company);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // Request body shape for POST /api/companies
+    // Request body for POST /api/companies
     static class CompanyRequest {
-        private Long userId;
         private String name;
         private String industry;
         private String netZeroBy;
@@ -75,9 +63,7 @@ public class CompanyController {
         private String ceoPayRatio;
         private String notes;
         private String source;
-
-        public Long getUserId() { return userId; }
-        public void setUserId(Long userId) { this.userId = userId; }
+        private String addedBy;
 
         public String getName() { return name; }
         public void setName(String name) { this.name = name; }
@@ -102,5 +88,8 @@ public class CompanyController {
 
         public String getSource() { return source; }
         public void setSource(String source) { this.source = source; }
+
+        public String getAddedBy() { return addedBy; }
+        public void setAddedBy(String addedBy) { this.addedBy = addedBy; }
     }
 }
