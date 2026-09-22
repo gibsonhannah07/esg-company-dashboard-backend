@@ -8,6 +8,7 @@ const EMPTY_FORM = {
   womenInLeadershipPct: "",
   ceoPayRatio: "",
   notes: "",
+  addedBy: "", //new with backend
 };
 
 export default function AddCompany({ onAdd, onClose }) {
@@ -57,6 +58,7 @@ export default function AddCompany({ onAdd, onClose }) {
             { label: "Women in Leadership %", name: "womenInLeadershipPct", placeholder: "e.g. ~75%" },
             { label: "CEO Pay Ratio", name: "ceoPayRatio", placeholder: "e.g. 80:1" },
             { label: "Notes", name: "notes", placeholder: "Any extra context" },
+            { label: "Added by:", name: "addedBy", placeholder: "e.g. Hannah"},
           ].map((field) => (
             <div key={field.name} className="form-group">
               <label>{field.label}</label>
