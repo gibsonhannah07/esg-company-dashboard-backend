@@ -17,7 +17,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/favorites")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
+//tells springboot to accept requests from 5173
 public class FavoriteController {
 
     @Autowired
