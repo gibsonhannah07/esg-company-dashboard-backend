@@ -1,7 +1,12 @@
 import "../styles/components/DetailPanel.css";
 
-
-export default function DetailPanel({ company, onClose, onCompare }) {
+export default function DetailPanel({
+  company,
+  onClose,
+  onCompare,
+  isFavorited,
+  onToggleFavorite
+}) {
   return (
     <div className="detail-panel">
 
@@ -13,14 +18,24 @@ export default function DetailPanel({ company, onClose, onCompare }) {
         <button className="btn-close" onClick={onClose}>Close</button>
       </div>
 
-      <button className="btn-add-company"
-        style={{ marginBottom: "20px" }}
-        onClick={() => onCompare(company)} >
-        + Add to Compare
-      </button>
+      <div className="detail-actions">
+        <button
+          className="btn-add-company"
+          onClick={() => onCompare(company)}
+        >
+          + Add to Compare
+        </button>
+
+        <button
+          className={`heart-btn ${isFavorited ? "favorited" : ""}`}
+          onClick={() => onToggleFavorite(company)}
+        >
+          {isFavorited ? "❤️" : "🤍"}
+        </button>
+      </div>
 
       <ul className="detail-metrics">
-        <li>🌎 Net Zero Goal Year <span>{company.netZeroBy}</span></li>  
+        <li>🌎 Net Zero Goal Year <span>{company.netZeroBy}</span></li>
         <li>🌱 Renewable Energy <span>{company.renewableEnergyPct}</span></li>
         <li>👥 Women in Leadership <span>{company.womenInLeadershipPct}</span></li>
         <li>🏛 CEO Pay Ratio <span>{company.ceoPayRatio}</span></li>

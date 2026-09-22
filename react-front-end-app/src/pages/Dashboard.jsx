@@ -157,15 +157,16 @@ export default function Dashboard() {
       <div className="dashboard-about">
         <p>Using this dashboard, users can search companies, filter by industry
           to narrow down a search, and click a company’s card to view its ESG
-          metrics and more information. Users can also utilize the “add and compare”
+          metrics and more information. Users can also utilize the “Add to compare"
           feature to add their own data and compare side by side with a company
-          in our database. </p>
+          in our database, or one you choose to add! Users can also save companies 
+          to their "Favorites" tab by clicking the heart icon. </p>
       </div>
       <div className="search-bar">
         <label className="search-label">Search a Company: </label>
         <input
           type="text"
-          placeholder="e.g. LaunchCode..."
+          placeholder="e.g. Verizon..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

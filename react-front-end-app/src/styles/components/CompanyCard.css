@@ -119,17 +119,43 @@
 }
 
 /* card favorite button */
-.card-favorite-btn {
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 4px 10px;
-  cursor: pointer;
-  font-size: 0.9rem;
+/* Footer layout */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
 }
 
-.card-favorite-btn.favorited {
-  background-color: #fff3cd;
-  border-color: #f0c14b;
-  color: #8a6d1a;
+/* Minimal heart button */
+.heart-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  transition: transform 0.15s ease;
+}
+
+.heart-btn:hover {
+  transform: scale(1.15);
+}
+
+.heart-btn.favorited {
+  color: red;
+  animation: heart-pop 0.25s ease;
+}
+
+
+@keyframes heart-pop {
+  0% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

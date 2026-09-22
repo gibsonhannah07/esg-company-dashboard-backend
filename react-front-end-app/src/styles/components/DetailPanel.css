@@ -83,6 +83,41 @@
   gap: 12px;
 }
 
+.detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* favorite button */
+.heart-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s ease;
+}
+
+.heart-btn:hover {
+  transform: scale(1.15);
+}
+
+.heart-btn.favorited {
+  color: red;
+  animation: heart-pop 0.25s ease;
+}
+
+/* pop animation */
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  60% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+
 
 @media (max-width: 768px) {
   .detail-panel {

@@ -34,13 +34,13 @@ export default function CompanyCard({
         </button>
 
         <button
-          className={`card-favorite-btn ${isFavorited ? "favorited" : ""}`}
+          className={`heart-btn ${isFavorited ? "favorited" : ""}`}
           onClick={(e) => {
             e.stopPropagation();
             onToggleFavorite(company);
           }}
         >
-          {isFavorited ? "★ Favorited" : "☆ Favorite"}
+          {isFavorited ? "❤️" : "🤍"}
         </button>
       </div>
     </div>
