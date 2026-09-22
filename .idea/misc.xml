@@ -5,6 +5,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/esg-company-dashboard/pom.xml" />
+        <option value="$PROJECT_DIR$/java-spring-boot-back-end-app/pom.xml" />
       </list>
     </option>
   </component>
