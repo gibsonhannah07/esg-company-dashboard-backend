@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -103,4 +104,23 @@ public class CompanyController {
         public String getAddedBy() { return addedBy; }
         public void setAddedBy(String addedBy) { this.addedBy = addedBy; }
     }
+
+    //update company notes
+    @PutMapping("/{id}/notes")
+    public ResponseEntity<Company> updateCompanyNotes(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        Company company = companyRepository.findById(id).orElse(null);
+        if (company == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String notes = body.get("notes");
+        company.setNotes(notes);
+
+        Company updated = companyRepository.save(company);
+        return ResponseEntity.ok(updated);
+    }
+
 }

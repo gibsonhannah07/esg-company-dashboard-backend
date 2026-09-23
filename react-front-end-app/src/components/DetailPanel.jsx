@@ -1,4 +1,6 @@
+import { useState } from "react";
 import "../styles/components/DetailPanel.css";
+import { updateCompanyNotes } from "../api";
 
 export default function DetailPanel({
   company,
@@ -6,8 +8,24 @@ export default function DetailPanel({
   onCompare,
   isFavorited,
   onToggleFavorite,
-  onDeleteCompany  
+  onDeleteCompany
 }) {
+  // local state for editable notes
+  const [notes, setNotes] = useState(company.notes || "");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSaveNotes = async () => {
+    setSaving(true);
+    try {
+      await updateCompanyNotes(company.id, notes);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="detail-panel">
 
@@ -34,7 +52,7 @@ export default function DetailPanel({
           {isFavorited ? "❤️" : "🤍"}
         </button>
 
-        {/*nly show delete button for user-added companies */}
+        {/* oly show delete button for user-added companies */}
         {company.addedBy && (
           <button
             className="btn-danger"
@@ -52,7 +70,30 @@ export default function DetailPanel({
         <li>🏛 CEO Pay Ratio <span>{company.ceoPayRatio}</span></li>
       </ul>
 
-      <p className="detail-description"><strong>Notes: </strong>{company.notes}</p>
+      <p className="detail-description">
+        <strong>Notes: </strong>{notes}
+      </p>
+
+      {/* editable notes section*/}
+      <div className="edit-notes-box">
+        <textarea
+          className="edit-notes-input"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Edit notes..."
+          rows="4"
+        />
+
+        <button
+          className="btn-primary"
+          onClick={handleSaveNotes}
+          disabled={saving}
+        >
+          {saving ? "Saving..." : "Save Notes"}
+        </button>
+
+        {saved && <p className="save-success">Notes updated!</p>}
+      </div>
 
       <p className="detail-description">
         <strong>Source: </strong>{company.source}
