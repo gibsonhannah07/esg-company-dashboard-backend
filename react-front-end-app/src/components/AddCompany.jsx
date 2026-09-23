@@ -41,7 +41,7 @@ export default function AddCompany({ onAdd, onClose }) {
         <div className="detail-header">
           <div>
             <h3 className="detail-name">Add a Company to Compare</h3>
-            <p className="detail-sub">Temporary session-only data</p>
+            <p className="detail-sub">Added companies will be saved to "Your Companies" page.</p>
           </div>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
