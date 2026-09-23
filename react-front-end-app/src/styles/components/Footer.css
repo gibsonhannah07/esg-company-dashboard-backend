@@ -11,8 +11,20 @@ footer {
 footer a {
   color: var(--blue-mid);
   text-decoration: none;
-}
+  margin-left: 6px; 
+} 
 
 footer a:hover {
+  text-decoration: underline;
+  color: var(--blue-dark);
+}
+
+.footer-link {
+  color: var(--blue-mid);
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--blue-dark);
   text-decoration: underline;
 }

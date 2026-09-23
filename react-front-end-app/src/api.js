@@ -82,3 +82,16 @@ export async function removeFavorite(favoriteId) {
   });
   if (!response.ok) throw new Error("Failed to remove favorite");
 }
+
+//PUT: update company notes
+export async function updateCompanyNotes(companyId, notes) {
+  const response = await fetch(`${BASE_URL}/companies/${companyId}/notes`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ notes }), //{} makes it show up as an object
+  });
+
+  if (!response.ok) throw new Error("Failed to update notes");
+  return response.json();
+}
+

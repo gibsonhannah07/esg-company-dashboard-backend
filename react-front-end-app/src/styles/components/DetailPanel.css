@@ -118,6 +118,25 @@
 }
 
 
+.edit-notes-box {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-notes-input {
+  padding: 10px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.save-success {
+  color: var(--blue-dark);
+  font-weight: 600;
+}
+
 
 @media (max-width: 768px) {
   .detail-panel {
