@@ -62,6 +62,4 @@ https://dbdiagram.io/d/Unit-2-ESG-Dashboard-6a864d38fd15a881e5bcc9cf
 ## Unsolved Problems / Future Features
 
 - **User authentication:** The app currently uses a single placeholder user rather than individual logins. Favorites and user-added companies are not yet tied to distinct accounts. Implementing real signup/login (and matching each user to their own data) is the top priority for a future iteration.
-- **Error handling/UI feedback:** Some failure states (e.g., a failed API call when adding a company) currently only log to the browser console rather than showing a clear message to the user in all cases.
-- **Editing/deleting user-added companies:** Users can currently add their own companies but cannot yet edit or delete them after submission.
 - **Deployment:** The app currently runs locally only; deploying the frontend and backend to a live hosting environment is a planned next step in project developmment. 
