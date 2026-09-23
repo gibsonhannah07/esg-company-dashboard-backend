@@ -5,7 +5,8 @@ export default function DetailPanel({
   onClose,
   onCompare,
   isFavorited,
-  onToggleFavorite
+  onToggleFavorite,
+  onDeleteCompany  
 }) {
   return (
     <div className="detail-panel">
@@ -32,6 +33,16 @@ export default function DetailPanel({
         >
           {isFavorited ? "❤️" : "🤍"}
         </button>
+
+        {/*nly show delete button for user-added companies */}
+        {company.addedBy && (
+          <button
+            className="btn-danger"
+            onClick={() => onDeleteCompany(company)}
+          >
+            Delete added company
+          </button>
+        )}
       </div>
 
       <ul className="detail-metrics">

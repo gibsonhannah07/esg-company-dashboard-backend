@@ -33,6 +33,17 @@ public class CompanyController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // DELETE a company added by a user
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
+        if (!companyRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        companyRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     // POST a new company (no login required)
     @PostMapping
     public ResponseEntity<Company> createCompany(@RequestBody CompanyRequest request) {

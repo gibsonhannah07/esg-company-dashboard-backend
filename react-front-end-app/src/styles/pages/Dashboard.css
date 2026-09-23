@@ -151,6 +151,24 @@
   gap: 12px;
 }
 
+
+.your-companies-columns {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.your-companies-column {
+  flex: 1;
+  min-width: 0; 
+}
+
+@media (max-width: 768px) {
+  .your-companies-columns {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-header {
     flex-direction: column;

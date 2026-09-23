@@ -147,6 +147,29 @@
   animation: heart-pop 0.25s ease;
 }
 
+/* delete button */
+.btn-danger {
+  background-color: var(--red-light);
+  color: #1a1a1a; 
+  border: 1px solid var(--red-border);
+  padding: 8px 14px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: var(--red-mid);
+  border-color: var(--red-mid);
+}
+
+.btn-danger:active {
+  background-color: var(--red-dark);
+  border-color: var(--red-dark);
+}
+
 
 @keyframes heart-pop {
   0% {

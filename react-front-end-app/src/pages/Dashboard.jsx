@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import "../styles/pages/Dashboard.css";
+
 import CompanyGrid from "../components/CompanyGrid";
 import FilterBar from "../components/FilterBar";
 import DetailPanel from "../components/DetailPanel";
 import ComparePanel from "../components/ComparePanel";
 import AddCompany from "../components/AddCompany";
+
 import {
   getAllCompanies,
   addCompany,
-  getFavoritesByUser,
+  getFavoritesBySession,
   addFavorite,
   removeFavorite,
-  CURRENT_USER_ID,
 } from "../api";
 
 export default function Dashboard() {
@@ -26,7 +27,7 @@ export default function Dashboard() {
   const [compared, setCompared] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  // Maps companyId to favoriteId, so we know which favorite row to delete later once we connect backend
+  // Maps companyId → favoriteId
   const [favoritesMap, setFavoritesMap] = useState({});
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function Dashboard() {
 
   async function loadFavorites() {
     try {
-      const data = await getFavoritesByUser(CURRENT_USER_ID);
+      const data = await getFavoritesBySession();
       const map = {};
       data.forEach((fav) => {
         map[fav.company.id] = fav.id;
@@ -63,22 +64,37 @@ export default function Dashboard() {
     const existingFavoriteId = favoritesMap[company.id];
 
     if (existingFavoriteId) {
+      // REMOVE FAVORITE
       try {
         await removeFavorite(existingFavoriteId);
+
         setFavoritesMap((prev) => {
           const updated = { ...prev };
           delete updated[company.id];
           return updated;
         });
+
+        // ⭐ Refresh favorites list
+        loadFavorites();
+
       } catch (err) {
         console.error("Failed to remove favorite", err);
       }
     } else {
+      // ADD FAVORITE
       try {
-        const newFavorite = await addFavorite(CURRENT_USER_ID, company.id);
+        const newFavorite = await addFavorite(company.id);
+
         if (newFavorite?.id) {
-          setFavoritesMap((prev) => ({ ...prev, [company.id]: newFavorite.id }));
+          setFavoritesMap((prev) => ({
+            ...prev,
+            [company.id]: newFavorite.id,
+          }));
         }
+
+        // ⭐ Refresh favorites list
+        loadFavorites();
+
       } catch (err) {
         console.error("Failed to add favorite", err);
       }
@@ -126,21 +142,21 @@ export default function Dashboard() {
   }
 
   async function handleAddUserCompany(newCompanyForm) {
-  try {
-    const saved = await addCompany(newCompanyForm);
-    setCompanies((prev) => [...prev, saved]);
+    try {
+      const saved = await addCompany(newCompanyForm);
+      setCompanies((prev) => [...prev, saved]);
 
-    setCompared((prev) => {
-      if (prev.length >= 2) return prev;
-      return [...prev, saved];
-    });
+      setCompared((prev) => {
+        if (prev.length >= 2) return prev;
+        return [...prev, saved];
+      });
 
-    setShowAddModal(false);
-  } catch (err) {
-    console.error("Failed to add company", err);
-    throw err; // re-throw so AddCompany's catch block can show a message
+      setShowAddModal(false);
+    } catch (err) {
+      console.error("Failed to add company", err);
+      throw err;
+    }
   }
-}
 
   function openAddCompanyModal() {
     setShowAddModal(true);
@@ -154,14 +170,16 @@ export default function Dashboard() {
       <div className="dashboard-header">
         <h2>Company Dashboard</h2>
       </div>
+
       <div className="dashboard-about">
-        <p>Using this dashboard, users can search companies, filter by industry
-          to narrow down a search, and click a company’s card to view its ESG
-          metrics and more information. Users can also utilize the “Add to compare"
-          feature to add their own data and compare side by side with a company
-          in our database, or one you choose to add! Users can also save companies 
-          to their "Favorites" tab by clicking the heart icon. </p>
+        <p>
+          Using this dashboard, users can search companies, filter by industry,
+          and click a company’s card to view its ESG metrics. You can also add
+          your own companies, compare any two side-by-side, and save favorites
+          using the heart icon.
+        </p>
       </div>
+
       <div className="search-bar">
         <label className="search-label">Search a Company: </label>
         <input
@@ -179,11 +197,8 @@ export default function Dashboard() {
       />
 
       <div className="dashboard-actions">
-        <button
-          className="btn-add-company"
-          onClick={() => setShowAddModal(true)}
-        >
-        + Add a company
+        <button className="btn-add-company" onClick={openAddCompanyModal}>
+          + Add a company
         </button>
       </div>
 
@@ -200,8 +215,6 @@ export default function Dashboard() {
         companies={filteredCompanies}
         selectedCompany={selectedCompany}
         onSelectCompany={handleSelectCompany}
-        onCompare={handleAddToCompare}
-        comparedCompanies={compared}
         favoritesMap={favoritesMap}
         onToggleFavorite={handleToggleFavorite}
       />

@@ -1,7 +1,6 @@
 package com.gibsonhannah07.esg_company_dashboard.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "favorites")
@@ -11,33 +10,36 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private String sessionId;   // ← replaces User
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id")
     private Company company;
-
-    private LocalDateTime createdAt;
 
     public Favorite() {}
 
-    public Favorite(User user, Company company, LocalDateTime createdAt) {
-        this.user = user;
+    public Favorite(String sessionId, Company company) {
+        this.sessionId = sessionId;
         this.company = company;
-        this.createdAt = createdAt;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public String getSessionId() {
+        return sessionId;
+    }
 
-    public Company getCompany() { return company; }
-    public void setCompany(Company company) { this.company = company; }
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 }

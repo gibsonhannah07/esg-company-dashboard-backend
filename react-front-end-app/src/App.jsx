@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
-import Favorites from "./pages/Favorites";
+import YourCompanies from "./pages/YourCompanies";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import './App.css';
@@ -20,7 +20,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/your-companies" element={<YourCompanies />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
 
