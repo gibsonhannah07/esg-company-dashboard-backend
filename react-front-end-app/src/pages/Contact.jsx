@@ -30,7 +30,6 @@ export default function Contact() {
   return (
     <div className="contact-section">
       <h2>Contact Us</h2>
-      <p>Have companies you want added or any questions? Contact us for more information and you'll receive a response shortly!</p>
       {submitted && <p className="contact-success">Thank you! Your message has been sent and we will get back to you shortly.</p>}
       <form className="contact-form" onSubmit={handleSubmit}>
         <div className="form-group">

@@ -6,6 +6,7 @@ export default function CompanyCard({
   isSelected,
   isFavorited,
   onToggleFavorite,
+  onDeleteCompany,
 }) {
   return (
     <div
@@ -15,10 +16,12 @@ export default function CompanyCard({
       <div className="card-header">
         <div>
           <p className="card-name">{company.name}</p>
+
           {company.addedBy && (
             <span className="card-user-badge">Added by {company.addedBy}</span>
           )}
         </div>
+
         <span className="card-industry">{company.industry}</span>
       </div>
 
@@ -42,6 +45,21 @@ export default function CompanyCard({
         >
           {isFavorited ? "❤️" : "🤍"}
         </button>
+
+        {/*deete only for user-added companies */}
+        {company.addedBy && (
+          <button
+            className="btn-danger"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onDeleteCompany) {
+                onDeleteCompany(company);
+              }
+            }}
+          >
+            Delete
+          </button>
+        )}
       </div>
     </div>
   );

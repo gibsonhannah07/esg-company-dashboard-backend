@@ -5,19 +5,19 @@ export default function CompanyGrid({
   companies,
   selectedCompany,
   onSelectCompany,
-  searchQueary,
+  searchQuery,
   favoritesMap,
   onToggleFavorite,
+  onDeleteCompany,
 }) {
-  if (companies.length === 0 && searchQueary) {
+  if (companies.length === 0 && searchQuery) {
     return (
-      <p>No results found for "{searchQueary}", try searching another company name. </p>
+      <p>No results found for "{searchQuery}", try searching another company name.</p>
     );
   }
+
   if (companies.length === 0) {
-    return (
-      <p className="empty-state">No companies match your filter.</p>
-    );
+    return <p className="empty-state">No companies match your filter.</p>;
   }
 
   return (
@@ -30,6 +30,7 @@ export default function CompanyGrid({
           isSelected={selectedCompany?.id === company.id}
           isFavorited={!!favoritesMap?.[company.id]}
           onToggleFavorite={onToggleFavorite}
+          onDeleteCompany={onDeleteCompany}   // safe for both pages
         />
       ))}
     </div>
